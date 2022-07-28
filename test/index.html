@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./test.css">
+</head>
+
+<body>
+
+    <input v-model="QRcode.inputValue" placeholder="请输入要生成的内容">
+    <button @click="GenerateQRCode"></button>
+    <div>
+        <!-- 动态绑定图片链接 -->
+        <img :src="QRcode.imgUrl" alt="">
+    </div>
+</body>
+<script>
+
+
+
+    function GenerateQRCode() {
+        this.axios({
+            methods: 'get',
+            url: "https://www.mxnzp.com/api/qrcode/create/single",
+            params: {
+                size: 200,  // 图片大小
+                type: 1,   // 返回的类型：1-字符串；0-下载链接
+                content: this.QRcode.inputValue, // 使用输入框的值
+            }
+        }).then(res => {
+            let imgUrl = window.URL.createObjectURL(res.data) // 调用window自带的函数来创建URL
+            this.QRcode.imgUrl = imgUrl // 保存链接
+        })
+    }
+</script>
+
+</html>
